@@ -53,6 +53,8 @@ jobs:
           aliases=$(echo '${{ toJSON(matrix.toolchain.aliases) }}' | jq -r 'if . == null then "" else join(" ") end')
           echo "ruby_platform=$ruby_platform" >> $GITHUB_ENV
           echo "aliases=$aliases" >> $GITHUB_ENV
+          docker_platform=$(echo '${{ matrix.toolchain.docker-platform }}')
+          echo "docker_platform=$docker_platform" >> $GITHUB_ENV
 
       # Test the container
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -113,7 +115,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: ./docker
           file: ./docker/Dockerfile.${{ env.ruby_platform }}
-          platforms: linux/amd64
+          platforms: ${{ env.docker_platform }}
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
