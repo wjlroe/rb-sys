@@ -28,7 +28,7 @@ jobs:
     steps:
       - id: data
         run: |
-          curl -s https://raw.githubusercontent.com/oxidize-rb/rb-sys/$GITHUB_SHA/data/toolchains.json > toolchains.json
+          curl -s https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_SHA/data/toolchains.json > toolchains.json
           echo "toolchains-data=$(jq -c '.toolchains | [.[] | select(.supported == true)]' toolchains.json)" >> $GITHUB_OUTPUT
   docker_images:
     needs: fetch_ci_data
@@ -129,12 +129,12 @@ jobs:
           rb_sys_dock_cache_dir="$HOME/.cache/rb-sys-dock"
           sudo chmod 777 tmp/oxi-test
           cd tmp/oxi-test
-          ruby -e "File.write('Gemfile', File.read('Gemfile').gsub(/gem .rb_sys.*$/, 'gem \"rb_sys\", git: \"https://github.com/oxidize-rb/rb-sys\", ref: \"$GITHUB_SHA\"'))"
+          ruby -e "File.write('Gemfile', File.read('Gemfile').gsub(/gem .rb_sys.*$/, 'gem \"rb_sys\", git: \"https://github.com/' + ENV.fetch('GITHUB_REPOSITORY') + '\", ref: \"$GITHUB_SHA\"'))"
 
           mkdir .cargo
           echo "[patch.crates-io]"      >> .cargo/config.toml
           for package in rb-sys rb-sys-build rb-sys-env; do
-            echo "$package = { git = 'https://github.com/oxidize-rb/rb-sys', rev = '$GITHUB_SHA' }" >> .cargo/config.toml
+            echo "$package = { git = 'https://github.com/$GITHUB_REPOSITORY', rev = '$GITHUB_SHA' }" >> .cargo/config.toml
             cargo update -p "$package"
           done
 
