@@ -124,6 +124,8 @@ jobs:
 
       - name: Run tests
         shell: bash
+        env:
+          RCD_IMAGE: "${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.ruby_platform }}:sha-$GITHUB_SHA"
         run: |
           echo "::group::Install deps"
           rb_sys_dock_cache_dir="$HOME/.cache/rb-sys-dock"
