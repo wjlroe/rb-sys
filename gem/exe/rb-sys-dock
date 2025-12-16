@@ -98,6 +98,7 @@ OptionParser.new do |opts|
     end
 
     OPTIONS[:platform] = p
+    OPTIONS[:docker_platform] = toolchain_info.docker_platform
     OPTIONS[:toolchain_info] = toolchain_info
   end
 
