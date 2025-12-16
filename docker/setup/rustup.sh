@@ -11,7 +11,7 @@ main() {
   td="$(mktemp -d)"
   builtin pushd "${td}"
 
-  local url="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init"
+  local url="https://static.rust-lang.org/rustup/dist/$(uname -m)-unknown-linux-gnu/rustup-init"
   curl --retry 3 --proto '=https' --tlsv1.2 -sSf "$url" > rustup-init
   curl --retry 3 --proto '=https' --tlsv1.2 -sSf "$url.sha256" > rustup-init.sha256
   # Remove "target/x86_64-unknown-linux-gnu/release/" string from rustup-init.sha256
